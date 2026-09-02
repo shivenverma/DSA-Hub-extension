@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { sendToBackground, type RepoSummary } from "@/messaging";
 import type { AuthProgress } from "@/github/auth";
 import {
@@ -68,6 +68,13 @@ export function Popup() {
 
   const screen = decideScreen(auth, config, summary, settingsOpen);
 
+  // Fix: Reset scroll position to top whenever navigating between screens (e.g. Dashboard <-> Settings)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    document.documentElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    document.body.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [screen]);
+
   const disconnect = () =>
     void run(async () => {
       const result = await sendToBackground({ t: "AUTH_DISCONNECT" });
@@ -89,99 +96,101 @@ export function Popup() {
         }
       />
 
-      {screen === "loading" && (
-        <div className="flex h-64 items-center justify-center">
-          <p className="text-xs text-zinc-500 font-medium animate-pulse">Loading DSAHub…</p>
-        </div>
-      )}
+      <main className="animate-screen-entrance">
+        {screen === "loading" && (
+          <div className="flex h-64 items-center justify-center">
+            <p className="text-xs text-zinc-500 font-medium animate-pulse">Loading DSAHub…</p>
+          </div>
+        )}
 
-      {screen === "connect" && (
-        <ConnectStep
-          busy={busy}
-          expired={auth.status === "expired"}
-          denied={auth.status === "denied"}
-          onConnect={() =>
-            void run(async () => {
-              const result = await sendToBackground({ t: "AUTH_START" });
-              if (result.ok) {
-                setAuth({ status: "pending", challenge: result.value });
-                await chrome.tabs.create({ url: result.value.verificationUri });
-              }
-              return result;
-            })
-          }
-        />
-      )}
+        {screen === "connect" && (
+          <ConnectStep
+            busy={busy}
+            expired={auth.status === "expired"}
+            denied={auth.status === "denied"}
+            onConnect={() =>
+              void run(async () => {
+                const result = await sendToBackground({ t: "AUTH_START" });
+                if (result.ok) {
+                  setAuth({ status: "pending", challenge: result.value });
+                  await chrome.tabs.create({ url: result.value.verificationUri });
+                }
+                return result;
+              })
+            }
+          />
+        )}
 
-      {screen === "authorizing" && auth.status === "pending" && (
-        <AuthorizingStep challenge={auth.challenge} onRecheck={() => void refresh()} />
-      )}
+        {screen === "authorizing" && auth.status === "pending" && (
+          <AuthorizingStep challenge={auth.challenge} onRecheck={() => void refresh()} />
+        )}
 
-      {screen === "repo" && auth.status === "connected" && (
-        <RepoStep
-          busy={busy}
-          login={auth.login}
-          onSelect={(name) =>
-            void run(async () => {
-              const result = await sendToBackground({ t: "REPO_SELECT", name });
-              if (result.ok) setConfig(await getConfig());
-              return result;
-            })
-          }
-          onDisconnect={disconnect}
-        />
-      )}
+        {screen === "repo" && auth.status === "connected" && (
+          <RepoStep
+            busy={busy}
+            login={auth.login}
+            onSelect={(name) =>
+              void run(async () => {
+                const result = await sendToBackground({ t: "REPO_SELECT", name });
+                if (result.ok) setConfig(await getConfig());
+                return result;
+              })
+            }
+            onDisconnect={disconnect}
+          />
+        )}
 
-      {screen === "dashboard" && auth.status === "connected" && config && summary && (
-        <Dashboard
-          busy={busy}
-          login={auth.login}
-          config={config}
-          summary={summary}
-          avatar={avatar}
-          onSyncNow={() =>
-            void run(async () => {
-              const result = await sendToBackground({ t: "SYNC_NOW" });
-              await refresh();
-              return result;
-            })
-          }
-          onResolve={(jobId, update) =>
-            void run(async () => {
-              const result = await sendToBackground({ t: "RESOLVE_CHOICE", jobId, update });
-              await refresh();
-              return result;
-            })
-          }
-          onOpenSettings={() => setSettingsOpen(true)}
-        />
-      )}
+        {screen === "dashboard" && auth.status === "connected" && config && summary && (
+          <Dashboard
+            busy={busy}
+            login={auth.login}
+            config={config}
+            summary={summary}
+            avatar={avatar}
+            onSyncNow={() =>
+              void run(async () => {
+                const result = await sendToBackground({ t: "SYNC_NOW" });
+                await refresh();
+                return result;
+              })
+            }
+            onResolve={(jobId, update) =>
+              void run(async () => {
+                const result = await sendToBackground({ t: "RESOLVE_CHOICE", jobId, update });
+                await refresh();
+                return result;
+              })
+            }
+            onOpenSettings={() => setSettingsOpen(true)}
+          />
+        )}
 
-      {screen === "settings" && auth.status === "connected" && config && (
-        <Settings
-          busy={busy}
-          login={auth.login}
-          config={config}
-          avatar={avatar}
-          onAvatarChange={handleAvatarChange}
-          onPatch={(patch) => void patchConfig(patch).then(setConfig)}
-          onChangeRepo={() =>
-            void patchConfig({ repoOwner: undefined, repoName: undefined }).then((next) => {
-              setConfig(next);
-              setSettingsOpen(false);
-            })
-          }
-          onDisconnect={disconnect}
-          onVerify={() => run(() => sendToBackground({ t: "VERIFY_SETUP" }))}
-          onBack={() => setSettingsOpen(false)}
-        />
-      )}
+        {screen === "settings" && auth.status === "connected" && config && (
+          <Settings
+            busy={busy}
+            login={auth.login}
+            config={config}
+            avatar={avatar}
+            onAvatarChange={handleAvatarChange}
+            onPatch={(patch) => void patchConfig(patch).then(setConfig)}
+            onChangeRepo={() =>
+              void patchConfig({ repoOwner: undefined, repoName: undefined }).then((next) => {
+                setConfig(next);
+                setSettingsOpen(false);
+              })
+            }
+            onDisconnect={disconnect}
+            onVerify={() => run(() => sendToBackground({ t: "VERIFY_SETUP" }))}
+            onBack={() => setSettingsOpen(false)}
+          />
+        )}
 
-      {error && (
-        <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-2.5 text-xs text-rose-300">
-          ⚠️ {error}
-        </div>
-      )}
+        {error && (
+          <div className="mt-3 rounded-xl border border-rose-500/20 bg-rose-500/10 p-2.5 text-xs text-rose-300">
+            ⚠️ {error}
+          </div>
+        )}
+      </main>
 
       {/* Tertiary Supported Platforms footer */}
       <footer className="flex items-center justify-center gap-3 border-t border-white/[0.06] pt-2.5 text-[11px] text-zinc-500">

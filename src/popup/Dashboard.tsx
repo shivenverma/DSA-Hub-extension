@@ -1,10 +1,11 @@
-﻿/**
+/**
  * Master Apple-inspired Dashboard for DSAHub.
  *
  * Read-only representation of user progress, difficulty breakdown, sync activity,
  * and connection status. Cleanly separated into modular components.
  */
 
+import { useEffect } from "react";
 import type { Config } from "@/storage/storage";
 import { Greeting } from "./components/Greeting";
 import { GitHubCard } from "./components/GitHubCard";
@@ -28,6 +29,12 @@ export function Dashboard(props: {
   const { summary, config, login, avatar } = props;
   const repo = `${config.repoOwner ?? ""}/${config.repoName ?? ""}`;
   const repoUrl = `https://github.com/${repo}/tree/${config.branch ?? "main"}`;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    document.documentElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    document.body.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
 
   return (
     <div className="space-y-3.5 text-sm">
