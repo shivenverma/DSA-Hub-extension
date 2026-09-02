@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+*.local
+.DS_Store
+.vite/
+.claude/
+
+# Build-time configuration. `.env.example` is the documented template; anything else
+# is a developer's own and stays out of the repo.
+.env
+.env.*
+!.env.example

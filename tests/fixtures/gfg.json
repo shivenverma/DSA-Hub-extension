@@ -1,0 +1,64 @@
+{
+  "_comment": "GUESSED shapes — unlike the LeetCode fixtures these were NOT captured from a live payload, because GFG publishes no documented practice API. Replace every entry with a real DevTools capture during live verification (docs/VERIFY-gfg.md); the tests will immediately show which parsers still hold. The parsers fail closed, so a wrong guess means nothing syncs rather than the wrong thing syncing.",
+
+  "submitRequestJson": {
+    "lang": "cpp",
+    "code": "class Solution {\npublic:\n    string reverseWord(string str) {\n        reverse(str.begin(), str.end());\n        return str;\n    }\n};",
+    "problem_id": "700123",
+    "submission_type": "submit"
+  },
+
+  "submitRequestForm": "lang=java&code=class+Solution+%7B%0A++String+reverseWord%28String+s%29+%7B%0A++++return+new+StringBuilder%28s%29.reverse%28%29.toString%28%29%3B%0A++%7D%0A%7D&problem_id=700123",
+
+  "submitResponseInlineAccepted": {
+    "submission_id": 55512345,
+    "status": "Correct Answer",
+    "lang": "cpp",
+    "time": "0.1",
+    "memory": "5.2"
+  },
+
+  "submitResponseQueued": {
+    "submission_id": 55512346,
+    "status": "Pending"
+  },
+
+  "submitResponseNoVerdict": {
+    "submission_id": 55512347
+  },
+
+  "submitResponseNested": {
+    "data": {
+      "submission_id": 55512348,
+      "status": "Problem Solved Successfully"
+    }
+  },
+
+  "resultAccepted": {
+    "submission_id": 55512346,
+    "status": "Correct Answer",
+    "lang": "python3"
+  },
+
+  "resultWrongAnswer": {
+    "submission_id": 55512349,
+    "status": "Wrong Answer",
+    "failed_testcase": 3
+  },
+
+  "resultCompilationError": {
+    "submission_id": 55512350,
+    "status": "Compilation Error",
+    "compilation_error": "prog.cpp:4:5: error: expected ';'"
+  },
+
+  "resultTimeLimit": {
+    "submission_id": 55512351,
+    "status": "Time Limit Exceeded"
+  },
+
+  "resultRunning": {
+    "submission_id": 55512352,
+    "status": "Running"
+  }
+}

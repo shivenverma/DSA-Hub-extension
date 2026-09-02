@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "DSAHub",
+  "version": "1.0.0",
+  "description": "Automatically sync accepted LeetCode and GeeksforGeeks solutions to GitHub.",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "permissions": ["storage", "alarms", "notifications"],
+  "host_permissions": ["https://github.com/*", "https://api.github.com/*"],
+  "background": {
+    "service_worker": "src/background/service-worker.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "DSAHub"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://leetcode.com/*", "https://www.geeksforgeeks.org/problems/*"],
+      "js": ["src/content/content.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": ["https://leetcode.com/*", "https://www.geeksforgeeks.org/*"],
+      "resources": ["assets/page-interceptor.js"]
+    }
+  ]
+}

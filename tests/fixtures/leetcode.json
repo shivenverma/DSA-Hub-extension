@@ -1,0 +1,117 @@
+{
+  "_comment": "Captured shapes of the LeetCode payloads DSAHub depends on. Replace any entry with a real capture from DevTools during live verification (see docs/VERIFY-leetcode.md) — the tests will immediately show whether the parsers still hold.",
+
+  "question": {
+    "data": {
+      "question": {
+        "questionFrontendId": "1",
+        "title": "Two Sum",
+        "difficulty": "Easy",
+        "topicTags": [{ "name": "Array" }, { "name": "Hash Table" }]
+      }
+    }
+  },
+
+  "questionMissingFields": {
+    "data": {
+      "question": {
+        "questionFrontendId": null,
+        "title": "",
+        "difficulty": "Insane",
+        "topicTags": null
+      }
+    }
+  },
+
+  "questionError": {
+    "errors": [{ "message": "That question does not exist." }],
+    "data": { "question": null }
+  },
+
+  "submitRequest": {
+    "lang": "cpp",
+    "question_id": "1",
+    "typed_code": "class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        unordered_map<int,int> seen;\n        for (int i = 0; i < nums.size(); ++i) {\n            auto it = seen.find(target - nums[i]);\n            if (it != seen.end()) return {it->second, i};\n            seen[nums[i]] = i;\n        }\n        return {};\n    }\n};"
+  },
+
+  "submitResponse": { "submission_id": 1234567890 },
+
+  "checkPending": { "state": "PENDING" },
+
+  "checkStarted": { "state": "STARTED" },
+
+  "checkAccepted": {
+    "status_code": 10,
+    "lang": "cpp",
+    "pretty_lang": "C++",
+    "run_success": true,
+    "status_runtime": "4 ms",
+    "memory": 10444000,
+    "question_id": "1",
+    "elapsed_time": 88,
+    "code_output": "",
+    "std_output": "",
+    "task_finish_time": 1735689600000,
+    "finished": true,
+    "total_correct": 63,
+    "total_testcases": 63,
+    "runtime_percentile": 85.21,
+    "status_memory": "10.4 MB",
+    "submission_id": "1234567890",
+    "status_msg": "Accepted",
+    "state": "SUCCESS"
+  },
+
+  "checkWrongAnswer": {
+    "status_code": 11,
+    "lang": "python3",
+    "pretty_lang": "Python3",
+    "run_success": true,
+    "question_id": "1",
+    "total_correct": 41,
+    "total_testcases": 63,
+    "last_testcase": "[3,2,4]\n6",
+    "expected_output": "[1,2]",
+    "code_output": "[0,1]",
+    "finished": true,
+    "submission_id": "1234567891",
+    "status_msg": "Wrong Answer",
+    "state": "SUCCESS"
+  },
+
+  "checkTimeLimit": {
+    "status_code": 14,
+    "lang": "java",
+    "pretty_lang": "Java",
+    "run_success": false,
+    "finished": true,
+    "submission_id": "1234567892",
+    "status_msg": "Time Limit Exceeded",
+    "state": "SUCCESS"
+  },
+
+  "checkCompileError": {
+    "status_code": 20,
+    "lang": "cpp",
+    "pretty_lang": "C++",
+    "run_success": false,
+    "compile_error": "line 4: error: expected ';'",
+    "finished": true,
+    "submission_id": "1234567893",
+    "status_msg": "Compile Error",
+    "state": "SUCCESS"
+  },
+
+  "submissionDetails": {
+    "data": {
+      "submissionDetails": {
+        "code": "class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) { return {}; }\n};",
+        "lang": { "name": "cpp" }
+      }
+    }
+  },
+
+  "submissionDetailsEmpty": {
+    "data": { "submissionDetails": null }
+  }
+}
