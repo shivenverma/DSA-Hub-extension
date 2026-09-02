@@ -1,7 +1,17 @@
 export function Header({ onOpenSettings }: { onOpenSettings?: () => void }) {
+  const logoUrl =
+    typeof chrome !== "undefined" && chrome.runtime?.getURL
+      ? chrome.runtime.getURL("logo.png")
+      : "/logo.png";
+
   return (
     <header className="flex items-center justify-between pb-1">
       <div className="flex items-center gap-2">
+        <img
+          src={logoUrl}
+          alt="DSAHub Logo"
+          className="h-6 w-6 rounded-lg object-contain drop-shadow"
+        />
         <span className="font-scotch text-lg font-bold tracking-tight text-white/95">
           DSAHub
         </span>
