@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Settings view for DSAHub.
  *
  * Configures Appearance (Avatar personalization, Theme), GitHub account & repo,
@@ -8,6 +8,7 @@
 import { useEffect, useState } from "react";
 import { sendToBackground } from "@/messaging";
 import type { Config } from "@/storage/storage";
+import { AvatarDisplay } from "./components/AvatarDisplay";
 import { AvatarPicker } from "./components/AvatarPicker";
 
 export function Settings(props: {
@@ -64,9 +65,9 @@ export function Settings(props: {
               onClick={() => setPickingAvatar(!pickingAvatar)}
               className="flex w-full cursor-pointer items-center justify-between text-xs text-zinc-200 transition"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <span>Avatar</span>
-                <span className="text-base leading-none">{avatar}</span>
+                <AvatarDisplay avatar={avatar} size="xs" />
               </div>
               <span className="text-xs text-zinc-500 font-medium flex items-center gap-1">
                 <span>{pickingAvatar ? "Close" : "Change"}</span>

@@ -90,22 +90,17 @@ export interface StorageShape {
   selectedAvatar?: string;
 }
 
-export const DEFAULT_AVATAR = "😊";
+export const DEFAULT_AVATAR = "Memoji-01.png";
 
-export const AVATAR_OPTIONS = [
-  { id: "smile", emoji: "😊", label: "Smiling Face" },
-  { id: "cool", emoji: "😎", label: "Cool with Sunglasses" },
-  { id: "nerd", emoji: "🤓", label: "Nerd Face" },
-  { id: "coder", emoji: "🧑‍💻", label: "Technologist / Developer" },
-  { id: "party", emoji: "🥳", label: "Partying Face" },
-  { id: "star", emoji: "🤩", label: "Star-Struck" },
-  { id: "happy", emoji: "😄", label: "Grinning Face with Smiling Eyes" },
-  { id: "calm", emoji: "🙂", label: "Slightly Smiling Face" },
-  { id: "grin", emoji: "😁", label: "Beaming Face" },
-  { id: "zen", emoji: "🧘", label: "Person in Lotus Position" },
-  { id: "fox", emoji: "🦊", label: "Fox" },
-  { id: "penguin", emoji: "🐧", label: "Penguin" },
-];
+export const AVATAR_OPTIONS = Array.from({ length: 26 }, (_, i) => {
+  const num = String(i + 1).padStart(2, "0");
+  const filename = `Memoji-${num}.png`;
+  return {
+    id: `memoji-${num}`,
+    filename,
+    label: `Memoji ${i + 1}`,
+  };
+});
 
 export const DEFAULT_CONFIG: Config = {
   newRepoVisibility: "private", // safe onboarding default (PRD §11)

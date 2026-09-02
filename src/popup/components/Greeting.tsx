@@ -15,14 +15,18 @@ export function Greeting({
   const displayName = formatName(login);
 
   return (
-    <div className="flex flex-col items-center justify-center py-2 text-center">
+    <div className="flex items-center gap-3.5 py-1">
       <AvatarDisplay avatar={avatar} size="md" />
-      <h1 className="mt-2.5 text-base font-semibold tracking-tight text-zinc-100">
-        Hey {displayName}! 👋
-      </h1>
-      <p className="mt-0.5 text-xs text-zinc-400">
-        Great to see you again.
-      </p>
+
+      <div className="flex flex-col justify-center min-w-0 flex-1">
+        <h1 className="flex items-center gap-1.5 text-xl font-bold tracking-tight text-white">
+          <span className="truncate">Hey {displayName}!</span>
+          <span className="shrink-0 text-lg">👋</span>
+        </h1>
+        <p className="text-xs text-zinc-400 mt-1 font-normal">
+          Great to see you again.
+        </p>
+      </div>
     </div>
   );
 }

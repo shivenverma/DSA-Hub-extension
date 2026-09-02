@@ -1,25 +1,35 @@
-﻿import { DEFAULT_AVATAR } from "@/storage/storage";
+﻿import { getAvatarUrl } from "../utils/avatar";
 
 export function AvatarDisplay({
-  avatar = DEFAULT_AVATAR,
+  avatar,
   size = "md",
+  className = "",
 }: {
   avatar?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
+  className?: string;
 }) {
   const sizeClasses = {
-    sm: "h-8 w-8 text-base",
-    md: "h-14 w-14 text-3xl",
-    lg: "h-16 w-16 text-4xl",
+    xs: "h-6 w-6",
+    sm: "h-9 w-9",
+    md: "h-20 w-20",
+    lg: "h-24 w-24",
   };
+
+  const url = getAvatarUrl(avatar);
 
   return (
     <div
-      className={`animate-avatar-entrance relative flex items-center justify-center rounded-2xl border border-white/[0.12] bg-gradient-to-b from-white/[0.08] to-white/[0.02] shadow-inner backdrop-blur-md select-none ${sizeClasses[size]}`}
-      aria-label="User Avatar"
+      className={`animate-avatar-entrance relative flex shrink-0 items-center justify-center select-none ${sizeClasses[size]} ${className}`}
+      aria-label="User Memoji Avatar"
       role="img"
     >
-      <span className="drop-shadow-sm">{avatar}</span>
+      <img
+        src={url}
+        alt="Avatar Memoji"
+        className="h-full w-full object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
+        loading="eager"
+      />
     </div>
   );
 }
