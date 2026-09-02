@@ -9,8 +9,8 @@
  * committed README — so the popup and the repository cannot disagree about how much is
  * solved (Rule 14).
  */
-import type { Platform } from "@/platforms/core/types";
-import { computeStatistics, type Count } from "@/readme/statistics";
+import type { Difficulty, Platform } from "@/platforms/core/types";
+import { calculateDifficultyStats, computeStatistics, type Count, type DifficultyStats } from "@/readme/statistics";
 import type { SyncJob, SyncRecord } from "@/storage/storage";
 
 /** How many recent syncs the popup lists. PRD §41's mock shows three; five fits. */
@@ -20,6 +20,8 @@ export interface Summary {
   /** PRD §41's Progress total, and §43's "synced" count. One number, computed once. */
   total: number;
   byPlatform: Count<Platform>[];
+  byDifficulty: Count<Difficulty>[];
+  difficultyStats: DifficultyStats;
   failed: number;
   pending: number;
   /** Most recently solved first. Only successes — the others are in `waiting`. */
@@ -33,11 +35,14 @@ export function summarize(index: Record<string, SyncRecord>, queue: SyncJob[]): 
   const withStatus = (status: SyncRecord["status"]): SyncRecord[] =>
     records.filter((record) => record.status === status);
 
-  const { total, byPlatform } = computeStatistics(index);
+  const { total, byPlatform, byDifficulty } = computeStatistics(index);
+  const difficultyStats = calculateDifficultyStats(index);
 
   return {
     total,
     byPlatform,
+    byDifficulty,
+    difficultyStats,
     failed: withStatus("failed").length,
     pending: withStatus("pending").length,
     recent: withStatus("success")

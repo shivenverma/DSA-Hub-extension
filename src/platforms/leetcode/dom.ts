@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DOM-based detection and extraction for LeetCode.
  * Acts as a resilient fallback/co-pilot alongside network interception.
  */
@@ -79,7 +79,7 @@ export function extractLeetCodeCodeFromDom(): string | undefined {
   }
 
   // Fallback to textarea or code block
-  const textarea = document.querySelector(".monaco-editor textarea, [class*='editor'] textarea") as HTMLTextAreaElement | null;
+  const textarea = document.querySelector<HTMLTextAreaElement>(".monaco-editor textarea, [class*='editor'] textarea");
   if (textarea?.value && textarea.value.trim().length > 0) {
     return textarea.value;
   }

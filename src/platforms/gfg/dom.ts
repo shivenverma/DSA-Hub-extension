@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DOM-based detection and extraction for GeeksforGeeks.
  */
 
@@ -21,7 +21,7 @@ export function extractGfgCodeFromDom(): string | undefined {
     if (code.trim().length > 0) return code;
   }
 
-  const textarea = document.querySelector("textarea.ace_text-input, textarea") as HTMLTextAreaElement | null;
+  const textarea = document.querySelector<HTMLTextAreaElement>("textarea.ace_text-input, textarea");
   if (textarea?.value && textarea.value.trim().length > 0) {
     return textarea.value;
   }

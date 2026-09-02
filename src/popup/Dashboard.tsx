@@ -59,6 +59,42 @@ export function Dashboard(props: {
         </div>
       </section>
 
+      <section>
+        <h2 className="mb-1 text-xs font-semibold tracking-wide text-slate-500">🎯 Difficulty</h2>
+        <div className="space-y-0.5 text-slate-700">
+          <div className="flex items-center justify-between py-0.5">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+              <span>Easy</span>
+            </span>
+            <span className="tabular-nums font-medium text-emerald-700">{summary.difficultyStats.easy}</span>
+          </div>
+          <div className="flex items-center justify-between py-0.5">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-2 w-2 rounded-full bg-amber-500" aria-hidden="true" />
+              <span>Medium</span>
+            </span>
+            <span className="tabular-nums font-medium text-amber-700">{summary.difficultyStats.medium}</span>
+          </div>
+          <div className="flex items-center justify-between py-0.5">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-2 w-2 rounded-full bg-rose-500" aria-hidden="true" />
+              <span>Hard</span>
+            </span>
+            <span className="tabular-nums font-medium text-rose-700">{summary.difficultyStats.hard}</span>
+          </div>
+          {summary.difficultyStats.unknown > 0 && (
+            <div className="flex items-center justify-between py-0.5">
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block h-2 w-2 rounded-full bg-slate-400" aria-hidden="true" />
+                <span>Unknown</span>
+              </span>
+              <span className="tabular-nums font-medium text-slate-500">{summary.difficultyStats.unknown}</span>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* PRD §43. Shown in full rather than hiding the zeros: "0 failed" is information. */}
       <p className="text-xs text-slate-500">
         {summary.total} synced · {summary.failed} failed · {summary.pending} pending

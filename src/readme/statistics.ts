@@ -20,6 +20,14 @@ export interface Count<T> {
   count: number;
 }
 
+export interface DifficultyStats {
+  easy: number;
+  medium: number;
+  hard: number;
+  unknown: number;
+  total: number;
+}
+
 export interface Statistics {
   total: number;
   /** Every supported platform, in a fixed order — including those with zero solved. */
@@ -31,8 +39,78 @@ export interface Statistics {
   byLanguage: Count<string>[];
 }
 
+/**
+ * Normalizes any raw difficulty input to standard Difficulty type.
+ * Unrecognized or missing values safely become "Unknown".
+ */
+export function normalizeDifficulty(raw: unknown): Difficulty {
+  if (typeof raw !== "string") return "Unknown";
+  const trimmed = raw.trim().toLowerCase();
+  if (trimmed === "easy") return "Easy";
+  if (trimmed === "medium") return "Medium";
+  if (trimmed === "hard") return "Hard";
+  return "Unknown";
+}
+
 export function syncedRecords(index: Record<string, SyncRecord>): SyncRecord[] {
   return Object.values(index).filter((record) => record.status === "success");
+}
+
+/**
+ * Deduplicates an array of records by platform + problemId/slug, keeping only successful syncs.
+ */
+export function dedupeSuccessfulRecords(records: SyncRecord[]): SyncRecord[] {
+  const successful = records.filter((record) => record.status === "success");
+  const map = new Map<string, SyncRecord>();
+  for (const record of successful) {
+    const id = record.problemId ?? record.slug;
+    const key = id ? `${record.platform}:${id}` : `${record.platform}:${record.title}`;
+    map.set(key, record);
+  }
+  return Array.from(map.values());
+}
+
+/**
+ * Calculates easy, medium, hard, unknown, and total counts for successfully synced problems.
+ * Handles both Record<string, SyncRecord> indices and SyncRecord[] arrays with deduplication.
+ */
+export function calculateDifficultyStats(
+  input: Record<string, SyncRecord> | SyncRecord[],
+): DifficultyStats {
+  const records = Array.isArray(input)
+    ? dedupeSuccessfulRecords(input)
+    : syncedRecords(input);
+
+  let easy = 0;
+  let medium = 0;
+  let hard = 0;
+  let unknown = 0;
+
+  for (const record of records) {
+    const diff = normalizeDifficulty(record.difficulty);
+    switch (diff) {
+      case "Easy":
+        easy++;
+        break;
+      case "Medium":
+        medium++;
+        break;
+      case "Hard":
+        hard++;
+        break;
+      case "Unknown":
+        unknown++;
+        break;
+    }
+  }
+
+  return {
+    easy,
+    medium,
+    hard,
+    unknown,
+    total: records.length,
+  };
 }
 
 export function computeStatistics(index: Record<string, SyncRecord>): Statistics {
@@ -46,7 +124,7 @@ export function computeStatistics(index: Record<string, SyncRecord>): Statistics
     })),
     byDifficulty: DIFFICULTY_ORDER.map((difficulty) => ({
       key: difficulty,
-      count: records.filter((record) => record.difficulty === difficulty).length,
+      count: records.filter((record) => normalizeDifficulty(record.difficulty) === difficulty).length,
       // Unknown is a real state (PRD §30), but an all-zero row is just clutter.
     })).filter((row) => row.key !== "Unknown" || row.count > 0),
     byCategory: tally(records, (record) => record.primaryCategory),

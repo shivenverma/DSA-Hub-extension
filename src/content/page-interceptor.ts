@@ -174,9 +174,13 @@ window.addEventListener("message", (event: MessageEvent<{ source?: string; reqId
             code = editor.getValue();
             lang = editor.session?.getMode?.()?.$id;
           }
-        } catch {}
+        } catch {
+          // Editor retrieval is best-effort
+        }
       }
-    } catch {}
+    } catch {
+      // Editor query is best-effort
+    }
 
     window.postMessage(
       {

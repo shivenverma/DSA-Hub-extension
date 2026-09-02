@@ -117,6 +117,18 @@ describe("summarize", () => {
         { key: "leetcode", count: 0 },
         { key: "gfg", count: 0 },
       ],
+      byDifficulty: [
+        { key: "Easy", count: 0 },
+        { key: "Medium", count: 0 },
+        { key: "Hard", count: 0 },
+      ],
+      difficultyStats: {
+        easy: 0,
+        medium: 0,
+        hard: 0,
+        unknown: 0,
+        total: 0,
+      },
       failed: 0,
       pending: 0,
       recent: [],
