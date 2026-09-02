@@ -87,7 +87,25 @@ export interface StorageShape {
   syncIndex: Record<string, SyncRecord>;
   queue: SyncJob[];
   cache: CacheState;
+  selectedAvatar?: string;
 }
+
+export const DEFAULT_AVATAR = "😊";
+
+export const AVATAR_OPTIONS = [
+  { id: "smile", emoji: "😊", label: "Smiling Face" },
+  { id: "cool", emoji: "😎", label: "Cool with Sunglasses" },
+  { id: "nerd", emoji: "🤓", label: "Nerd Face" },
+  { id: "coder", emoji: "🧑‍💻", label: "Technologist / Developer" },
+  { id: "party", emoji: "🥳", label: "Partying Face" },
+  { id: "star", emoji: "🤩", label: "Star-Struck" },
+  { id: "happy", emoji: "😄", label: "Grinning Face with Smiling Eyes" },
+  { id: "calm", emoji: "🙂", label: "Slightly Smiling Face" },
+  { id: "grin", emoji: "😁", label: "Beaming Face" },
+  { id: "zen", emoji: "🧘", label: "Person in Lotus Position" },
+  { id: "fox", emoji: "🦊", label: "Fox" },
+  { id: "penguin", emoji: "🐧", label: "Penguin" },
+];
 
 export const DEFAULT_CONFIG: Config = {
   newRepoVisibility: "private", // safe onboarding default (PRD §11)
@@ -105,6 +123,7 @@ const FALLBACKS: { [K in keyof StorageShape]: StorageShape[K] } = {
   syncIndex: {},
   queue: [],
   cache: { branches: {} },
+  selectedAvatar: DEFAULT_AVATAR,
 };
 
 export async function get<K extends keyof StorageShape>(key: K): Promise<StorageShape[K]> {
@@ -129,3 +148,13 @@ export async function patchConfig(patch: Partial<Config>): Promise<Config> {
   await set("config", next);
   return next;
 }
+
+export async function getAvatar(): Promise<string> {
+  const avatar = await get("selectedAvatar");
+  return avatar || DEFAULT_AVATAR;
+}
+
+export async function setAvatar(avatar: string): Promise<void> {
+  await set("selectedAvatar", avatar);
+}
+
